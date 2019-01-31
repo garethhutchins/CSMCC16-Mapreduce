@@ -127,6 +127,7 @@ namespace CSMCC16
                 txt_log.Text = "";
                 txt_log.Text = "Starting New Mapreduce";
                 Mapper mapper = new Mapper();
+                mapper.AirportFile = txt_apt.Text;
                 mapper.PassengerFile = txt_pdf.Text;
                 mapper.log = txt_log;
                 mapper.Map();
