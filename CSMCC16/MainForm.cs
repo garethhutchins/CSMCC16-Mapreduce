@@ -129,6 +129,7 @@ namespace CSMCC16
                 Mapper mapper = new Mapper();
                 mapper.AirportFile = txt_apt.Text;
                 mapper.PassengerFile = txt_pdf.Text;
+                mapper.outputPath = txt_output.Text;
                 mapper.log = txt_log;
                 mapper.Map();
             }
