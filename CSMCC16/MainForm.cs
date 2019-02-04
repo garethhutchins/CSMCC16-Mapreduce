@@ -125,13 +125,19 @@ namespace CSMCC16
             {
                 //Clear the log
                 txt_log.Text = "";
-                txt_log.Text = "Starting New Mapreduce";
+                txt_log.Text = "Starting New MapReduce";
+                //create a new Mapper Object
                 Mapper mapper = new Mapper();
+                //Set the files to be used
                 mapper.AirportFile = txt_apt.Text;
                 mapper.PassengerFile = txt_pdf.Text;
                 mapper.outputPath = txt_output.Text;
                 mapper.log = txt_log;
-                mapper.Map();
+                //Map the Airports synchronously as we need to validate the airports for the passenger files
+                mapper.MapAirports();
+
+                //Map the passenger File
+
             }
             else
             {
