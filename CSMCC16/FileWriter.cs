@@ -16,10 +16,12 @@ namespace CSMCC16
             lock_.EnterWriteLock();
             try
             {
-                using (var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (var fs = new FileStream(filePath, FileMode.Append, FileAccess.Write))
                 {
-                    byte[] dataAsByteArray = new UTF8Encoding(true).GetBytes(WriteData);
-                    fs.Write(dataAsByteArray, 0, WriteData.Length);
+                    using (var fw = new StreamWriter(fs)) {
+                        fw.WriteLine(WriteData);
+}
+                    
                 }
             }
             finally
