@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using CSMCC16;
+using System.Text;
 
 public class Mapper
 {
@@ -44,6 +45,9 @@ public class Mapper
     public string ErrorFile = "";
     public string AptLatFile = "";
     public string AptLonFile = "";
+    // Set the Max Buffer to 300 so we see something happen
+        public const int MAX_BUFFER = 300;
+    
     public void MapAirports()
 
     {
@@ -51,7 +55,8 @@ public class Mapper
          ErrorFile = outputPath + @"\AirportsErrorFile.txt";
          AptLatFile = outputPath + @"\Map_AptLat.csv";
          AptLonFile = outputPath + @"\Map_AptLon.csv";
-        List<string> AptChunkFiles = new List<string>();
+          List<string> AptChunkFiles = new List<string>();
+        List<string> Lines = new List<string>();
         
      
         log.AppendText(System.Environment.NewLine + "Deleting Existing Output Files");
@@ -71,58 +76,30 @@ public class Mapper
 
         //Chunk the Airports File
         log.AppendText(System.Environment.NewLine + "Chunking the Airports File");
-        // Set the Max Buffer to 300 so we see something happen
-        const int MAX_BUFFER = 3000;
-        byte[] buffer = new byte[MAX_BUFFER];
-        int bytesRead;
+        using (StreamReader reader = new StreamReader(AirportFile)) {
+         //While we're not at the end of the file
+         string line;
+         double BytesRead = 0;
+        int FileChunk = 0;
+         while ((line = reader.ReadLine()) != null) {
+            Lines.Add(line);
+            BytesRead = BytesRead + Encoding.UTF8.GetByteCount(line);
+            //Check to see if we're over the assigned Buffer
+            if (BytesRead > MAX_BUFFER) {
+                    //Create a file Split
+                    string AptChunkFile = outputPath + @"\AptChunk_" + FileChunk + ".csv";
+                    File.WriteAllLines(AptChunkFile,Lines);
+                    AptChunkFiles.Add(AptChunkFile);
+                    FileChunk++;
+                    Lines.Clear();
+                    BytesRead = 0;
+}               
+}
+}
 
-        //Set a counter for the chunk files
-        int ChunkCount = 0;
-        string TempBuff = "";
-
-        using (FileStream fs = File.Open(AirportFile, FileMode.Open, FileAccess.Read))
-
-        using (BufferedStream bs = new BufferedStream(fs))
-        {
-            string line;
-            List<string> lines = new List<string>();
-            while ((bytesRead = bs.Read(buffer, 0, MAX_BUFFER)) != 0)
-            {
-                var stream = new StreamReader(new MemoryStream(buffer));
-                while ((line = stream.ReadLine()) != null)
-                {
-                    //Check if the last char is a new line
-                    if (line.IndexOf(Environment.NewLine) == (line.Length - 1))
-                    {
-                        //See if there's something left from the last chunk
-                        if (!TempBuff.Equals(""))
-                        {
-                            line = TempBuff + line;
-                            TempBuff = "";
-                        }
-                        //Add the line to the list
-                        lines.Add(line);
-                    }
-                    else
-                    {
-                        //We've Reached the end of the buffer
-                        //Get the remaining line and store it to the temp
-                        TempBuff = line;
-                        //When it's got to the end of the line save the file
-                        File.WriteAllLines(outputPath + @"\AptChunk_" + ChunkCount + ".csv", lines);
-                        ChunkCount++;
-                    }
-
-
-                }
-            }
-            //When it's got to the end of the line save the file
-            File.WriteAllLines(outputPath + @"\AptChunk_" + ChunkCount + ".csv", lines);
-            ChunkCount++;
-        }
-
-            log.AppendText(System.Environment.NewLine + aptOKCount + " Airports Added");
+        log.AppendText(System.Environment.NewLine + aptOKCount + " Airports Added");
     }
+
     public void AirportMapTreading(string chunkFile)
     {
         //Run a parallel process to read the lines of the CSV
