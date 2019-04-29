@@ -42,50 +42,116 @@ public class Mapper
     public List<string> ValidAirport = new List<string>();
     public int aptOKCount = 0;
     public int aptErrCount = 0;
-    public string ErrorFile = "";
+    public string AptErrorFile = "";
+    public string PassengerErrorFile = "";
     public string AptLatFile = "";
     public string AptLonFile = "";
+    //Flight Mapping
+    public string FlightAirportFile = "";
+    public string FlightPassengerFile = "";
+    public string FlighOriFile = "";
+    public string FlightDestFile = "";
+    public string FlightDepFile = "";
+    public string FlightTimeFile = "";
+    public List<string> PassengerChunkFiles = new List<string>();
     public List<string> AptChunkFiles = new List<string>();
     public List<string> Lines = new List<string>();
+
     // Set the Max Buffer to 300 so we see something happen
     public const int MAX_BUFFER = 300;
+    public void MapPassengers()
+    {
+        //Add to the log    
+        log.AppendText(System.Environment.NewLine + "Opening Passenger File" + PassengerFile);
 
+        //Set the output file paths
+        PassengerErrorFile = outputPath + @"\PassengerErrorFile.txt";
+
+        //See if the Mappers directory exists
+        if (!Directory.Exists(outputPath + @"\Mappers"))
+        {
+            //If not, create it
+            Directory.CreateDirectory(outputPath + @"\Mappers");
+        }
+
+    }
     public void MapAirports()
 
     {
         //Set the output file paths
-        ErrorFile = outputPath + @"\AirportsErrorFile.txt";
-        AptLatFile = outputPath + @"\Map_AptLat.csv";
-        AptLonFile = outputPath + @"\Map_AptLon.csv";
-
+        AptErrorFile = outputPath + @"\AirportsErrorFile.txt";
+        AptLatFile = outputPath + @"\Mappers\AptLat.csv";
+        AptLonFile = outputPath + @"\Mappers\AptLon.csv";
+        //See if the Mappers directory exists
+        if (!Directory.Exists(outputPath + @"\Mappers"))
+        {
+            //If not, create it
+            Directory.CreateDirectory(outputPath + @"\Mappers");
+        }
 
         //Delete any Exisiting Files    
         log.AppendText(System.Environment.NewLine + "Deleting Existing Output Files");
-        try
+        //See if the files exist.
+        if (File.Exists(AptErrorFile))
         {
-            File.Delete(ErrorFile);
-            File.Delete(AptLatFile);
-            File.Delete(AptLonFile);
-        } catch (IOException)
-        {
-            log.AppendText(System.Environment.NewLine + "Unable to Delete Files");
-            return;
+            try
+            {
+                File.Delete(AptErrorFile);
+                File.Delete(AptLatFile);
+                File.Delete(AptLonFile);
+            }
+            catch (IOException)
+            {
+                log.AppendText(System.Environment.NewLine + "Unable to Delete Files");
+                return;
+            }
         }
+       
 
         //Now open the Airports File
         log.AppendText(System.Environment.NewLine + "Opening Airport File" + AirportFile);
         //Now chunk the Airports file
         ChunkAirports();
 
+        //Now convert the airports into the required value pairs
+        //Run a parallel process to read the lines of the CSV files, one file per thread
+        //Calculate how many threads to run devide by two as the reading of the file will also be multi threaded.
+
+        var Paralleloptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 2 };
+        Parallel.ForEach(AptChunkFiles, Paralleloptions, aptChunk =>
+            {
+                AirportMapThreading(aptChunk);
+        }
+            );
+        
+        //Set the Log file
         log.AppendText(System.Environment.NewLine + aptOKCount + " Airports Added");
 
+        //Now delete the Temporary Chunking files
+        int DelCount = 0;
+        foreach (string aptchunk in AptChunkFiles)
+        {
+            try
+            {
+                File.Delete(aptchunk);
+                log.AppendText(System.Environment.NewLine + "Deleted File " + aptchunk);
+                //Add that counter to the list
+                DelCount++;
+            }
+            catch (IOException)
+            {
+                log.AppendText(System.Environment.NewLine + "Unable to Delete File " +aptchunk);
+                return;
+            }
+        }
+        log.AppendText(System.Environment.NewLine + DelCount.ToString() + " Temporary Buffer Files Deleted");
     }
 
 
 
     private void ChunkAirports()
     {
-        //Chunk the Airports File
+        //Chunk the Airports File for multiple threads to work on later
         log.AppendText(System.Environment.NewLine + "Chunking the Airports File");
         using (StreamReader reader = new StreamReader(AirportFile))
         {
@@ -102,9 +168,9 @@ public class Mapper
                 {
                     //Create a file Split
                     //If we're over the assigned memory buffer then dump the memory to a numbered chunk file
-                    string AptChunkFile = outputPath + @"\AptChunk_" + FileChunk + ".csv";
+                    string AptChunkFile = outputPath + @"\Mappers\AptChunk_" + FileChunk + ".csv";
                     File.WriteAllLines(AptChunkFile, Lines);
-                    //Add tjechunk file to the lists
+                    //Add the chunk file to the lists
                     AptChunkFiles.Add(AptChunkFile);
                     //Increase chunk count
                     FileChunk++;
@@ -118,20 +184,21 @@ public class Mapper
         }
     }
 
-        public void AirportMapThreading(string chunkFile)
+    public void AirportMapThreading(string aptChunk)
         {
             //Run a parallel process to read the lines of the CSV
             //Calculate how many threads to run
 
-            var Paralleloptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
-            Parallel.ForEach(File.ReadLines(AirportFile).Select(line => line.Split(',')), Paralleloptions,
+            var Paralleloptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 2 };
+            Parallel.ForEach(File.ReadLines(aptChunk).Select(line => line.Split(',')), Paralleloptions,
                 components =>
                 {
-                //Check the CSV file is in the correct format.
-                if (components.Length == 4)
+                    Boolean OK = true;
+                    string ErrorText = "";
+                    //Check the CSV file is in the correct format.
+                    if (components.Length == 4)
                     {
-                        Boolean OK = true;
-                        string ErrorText = "";
+                        
                     //Check the airport format is correct
                     if (!APT.IsMatch(components[1]))
                         {
@@ -174,32 +241,52 @@ public class Mapper
                         else
                         {
                         //Write the Errors to file
-                        new FileWriter().WriteData(ErrorText, ErrorFile);
+                        new FileWriter().WriteData(ErrorText, AptErrorFile);
                         }
                     }
-                }
-                );
-        }
-        public void MapPassengers() {
-
-            log.AppendText(System.Environment.NewLine + "Opening Passenger File" + PassengerFile);
-            var Paralleloptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 10 };
-
-            Parallel.ForEach(File.ReadLines(PassengerFile).Select(line => line.Split(',')), Paralleloptions,
-                components =>
-                {
-                //Check the CSV file is in the correct format.
-                if (components.Length == 6)
+                else
                     {
-                        Boolean OK = true;
-                        string ErrorText = "";
+                        //Invalid line format
+                        //Write the Errors to file
+                        ErrorText = "Invlaid Line Entry";
+                        new FileWriter().WriteData(ErrorText, AptErrorFile);
                     }
-
                 }
                 );
         }
+
+    public void PassengerMapThreading(string psnChunk)
+    {
+        var Paralleloptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 2 };
+        Boolean OK = true;
+        string ErrorText = "";
+
+        Parallel.ForEach(File.ReadLines(PassengerFile).Select(line => line.Split(',')), Paralleloptions,
+            components =>
+            {
+                    //Check the CSV file is in the correct format.
+                    if (components.Length == 6)
+                {
+                    
+                }
+                else
+                {
+                    //Loop through all of the component to specify the error
+                    string tError = "";
+                    foreach(string s in components)
+                    {
+                        //Show what you can from the error line
+                        tError = tError + s + " ";
+                    }
+                    log.AppendText(System.Environment.NewLine + "Invalid Passenger File Line" + PassengerFile);
+                }
+
+            }
+            );
     }
+   
 }
+
 
    
     

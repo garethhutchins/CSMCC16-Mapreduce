@@ -134,9 +134,12 @@ namespace CSMCC16
                 mapper.outputPath = txt_output.Text;
                 mapper.log = txt_log;
                 //Map the Airports synchronously as we need to validate the airports for the passenger files
+                
+                //Start with Mapping the Airports file.
                 mapper.MapAirports();
 
                 //Map the passenger File
+                mapper.MapPassengers();
 
             }
             else
