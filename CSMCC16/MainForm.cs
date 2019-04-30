@@ -19,17 +19,7 @@ namespace CSMCC16
         {
             InitializeComponent();
         }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void btn_pdf_Click(object sender, EventArgs e)
         {
             //Browse to the pasenger file
@@ -148,8 +138,9 @@ namespace CSMCC16
             }
         }
 
-
-
-
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

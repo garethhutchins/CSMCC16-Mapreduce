@@ -115,7 +115,7 @@
             this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Airport Data File";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            
             // 
             // txt_apt
             // 
@@ -166,19 +166,20 @@
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_cancel.TabIndex = 2;
-            this.btn_cancel.Text = "Cancel";
+            this.btn_cancel.Text = "Exit";
             this.btn_cancel.UseVisualStyleBackColor = true;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
             // txt_log
             // 
-            this.txt_log.Enabled = false;
             this.txt_log.Location = new System.Drawing.Point(6, 19);
             this.txt_log.Multiline = true;
             this.txt_log.Name = "txt_log";
+            this.txt_log.ReadOnly = true;
             this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txt_log.Size = new System.Drawing.Size(512, 174);
             this.txt_log.TabIndex = 3;
-            this.txt_log.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            
             // 
             // groupBox2
             // 
@@ -194,14 +195,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 436);
+            this.ClientSize = new System.Drawing.Size(562, 453);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.btn_run);
             this.Controls.Add(this.groupBox1);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mapreduce";
+            this.Text = "Map Reduce";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
