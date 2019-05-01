@@ -131,6 +131,35 @@ namespace CSMCC16
                 //Map the passenger File
                 mapper.MapPassengers();
 
+                //Now start Sorting
+                SortFunctions SF = new SortFunctions();
+                SF.outputpath = mapper.outputPath;
+                //Now add a dictionary of the mappers so that it can run on multiple threads.
+                Dictionary<string, string[]> MapOutput = new Dictionary<string, string[]>();
+                //Add the inputfiles required
+
+                //A list of all flights from airport and the list of airport codes
+                string[] FlightAirportFiles = { mapper.AptLatFile, mapper.FromAirportFile };
+                MapOutput.Add("FlightsAirport", FlightAirportFiles);
+
+                //Passengers for each flight Sorter
+                string[] PassengerFlightFiles = { mapper.FlightPassengerFile };
+                MapOutput.Add("FlightPassengers", PassengerFlightFiles);
+          
+               
+
+                //Now set the multithreading options
+                //We will just have one Sorter per thread this time and not set the maximum
+                //Each sorter will then go to the relevant reducers
+                Parallel.ForEach(MapOutput, MapperOut =>
+                {
+                    //Now run the required Sorter
+                    SF.Sort(MapperOut.Key, MapperOut.Value);
+                   
+                });
+
+                //Update the Log window
+                txt_log.AppendText(SF.LogWindow);
             }
             else
             {
