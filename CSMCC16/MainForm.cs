@@ -124,7 +124,7 @@ namespace CSMCC16
                 mapper.outputPath = txt_output.Text;
                 mapper.log = txt_log;
                 //Map the Airports synchronously as we need to validate the airports for the passenger files
-                
+
                 //Start with Mapping the Airports file.
                 mapper.MapAirports();
 
@@ -145,21 +145,33 @@ namespace CSMCC16
                 //Passengers for each flight Sorter
                 string[] PassengerFlightFiles = { mapper.FlightPassengerFile };
                 MapOutput.Add("FlightPassengers", PassengerFlightFiles);
-          
-               
+
+                //Distance For each Flight
+                string[] DistanceFlightFiles = { mapper.AptLatFile, mapper.AptLatFile, mapper.FlightDepArptFile, mapper.FlightDestFile, mapper.FlightPassengerFile };
+                MapOutput.Add("FlightDistance", DistanceFlightFiles);
+                //Now do the garbage collection from the mappers
+                mapper = null;
+                GC.Collect();
 
                 //Now set the multithreading options
-                //We will just have one Sorter per thread this time and not set the maximum
+                //We will just have one Sorter per thread and set the maximum number of thread to processor /2 to avoid memory issues
                 //Each sorter will then go to the relevant reducers
-                Parallel.ForEach(MapOutput, MapperOut =>
+                var Paralleloptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 2 };
+                Parallel.ForEach(MapOutput, Paralleloptions, MapperOut =>
                 {
                     //Now run the required Sorter
                     SF.Sort(MapperOut.Key, MapperOut.Value);
-                   
+                    //Garbage collect each thread to free up any memory still left
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
                 });
 
                 //Update the Log window
                 txt_log.AppendText(SF.LogWindow);
+
+                //All done, now show the output folder in explorer
+
+
             }
             else
             {

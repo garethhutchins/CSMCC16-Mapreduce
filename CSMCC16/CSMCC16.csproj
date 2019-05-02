@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReducePassengerDistance.cs" />
     <Compile Include="SortFunctions.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="MainForm.cs">

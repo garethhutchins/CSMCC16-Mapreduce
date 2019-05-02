@@ -25,12 +25,30 @@ public class SortFunctions
                 //Calculate the number of Passengers on each flight
                 FlightsPassengers(MapOutput);
                 break;
+            case "FlightDistance":
+                //Calculate the Flight Distance and total for passengers
+                FlightsDistance(MapOutput);
+                break;
 
         }
     }
+    private void FlightsDistance(string[] MapOutput)
+    {
+        string ErrorFile = outputpath + @"\FlightsDistanceErrorFile.txt";
+        //Load lat and longs into memory we know buffer is ok from previous step
+        Dictionary<string, double> AptLat = new Dictionary<string, double>();
+        Dictionary<string, double> AptLon = new Dictionary<string, double>();
+
+        Dictionary<string, Tuple<double, double>> Flight = new Dictionary<string, Tuple<double, double>>();
+        
+        //Get Starting Lat and long for each flight
+        
+        //Get Ending Lat and Long for each flight
+
+    }
     private void FlightsPassengers(string[] MapOutput)
     {
-        String ErrorFile = outputpath + @"\PassengerFlightsErrorFile.txt";
+        string ErrorFile = outputpath + @"\PassengerFlightsErrorFile.txt";
         //First load all of the unique airport codes into a dictionay
         //create a list of tuples to assign the value, the reducer will then do the calculations later.
         List<Tuple<string, int>> FlightPassengerCount = new List<Tuple<string, int>>();
