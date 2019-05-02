@@ -62,9 +62,9 @@
     <Compile Include="FlightsPassengersResults.Designer.cs">
       <DependentUpon>FlightsPassengersResults.cs</DependentUpon>
     </Compile>
+    <Compile Include="ReduceFlightDistance.cs" />
     <Compile Include="ReduceFlightsPassengers.cs" />
     <Compile Include="ReduceFlightsAirport.cs" />
-    <Compile Include="ReducePassengerDistance.cs" />
     <Compile Include="SortFunctions.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="MainForm.cs">

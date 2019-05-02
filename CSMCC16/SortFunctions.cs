@@ -233,6 +233,18 @@ public class SortFunctions
         GC.Collect();
         GC.WaitForPendingFinalizers();
 
+        //Now Reduce the Flight Distance
+        ReduceFlightDistance RFD = new ReduceFlightDistance();
+        RFD.logwindow = LogWindow;
+        RFD.outputpath = outputpath;
+        RFD.FlightPassengers = PassengerFlights;
+        RFD.FlightStart = FlightStartLocFile;
+        RFD.FlightEnd = FlightEndLocFile;
+        RFD.Reduce();
+        //Garbage Collect
+        RFD = null;
+        GC.Collect();
+
     }
     private void FlightsPassengers(string[] MapOutput)
     {
