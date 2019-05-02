@@ -56,6 +56,13 @@
     <Compile Include="FlightsAirportResults.Designer.cs">
       <DependentUpon>FlightsAirportResults.cs</DependentUpon>
     </Compile>
+    <Compile Include="FlightsPassengersResults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlightsPassengersResults.Designer.cs">
+      <DependentUpon>FlightsPassengersResults.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReduceFlightsPassengers.cs" />
     <Compile Include="ReduceFlightsAirport.cs" />
     <Compile Include="ReducePassengerDistance.cs" />
     <Compile Include="SortFunctions.cs" />
@@ -71,6 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FlightsAirportResults.resx">
       <DependentUpon>FlightsAirportResults.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlightsPassengersResults.resx">
+      <DependentUpon>FlightsPassengersResults.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

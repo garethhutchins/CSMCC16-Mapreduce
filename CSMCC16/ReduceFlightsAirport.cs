@@ -31,6 +31,9 @@ namespace CSMCC16
             }
             //Now all the values have been added change the order of the dictionary
             var SortedDic = FlightsAirport.OrderByDescending(d => d.Value).ToList();
+            //Garbage Collect the unsorted Dictionary
+            FlightsAirport = null;
+            GC.Collect();
             //Save the results to file
             //Create the Directory
             if (!Directory.Exists(OutputPath + @"\Reducers"))
@@ -49,13 +52,13 @@ namespace CSMCC16
                 }
                 catch (IOException)
                 {
-                    LogWindow = LogWindow + System.Environment.NewLine + "Unable to Save File " + outputFile; ;
+                    LogWindow = LogWindow + System.Environment.NewLine + "Unable to Save File " + outputFile;
                     return;
                 }
             }
             //Now save the File and pass the results to the Results Window
             FlightsAirportResults FAR = new FlightsAirportResults();
-            
+
             using (StreamWriter Writer = new StreamWriter(outputFile))
             {
                 foreach (var apt in SortedDic)
@@ -70,7 +73,8 @@ namespace CSMCC16
             //Set the chart Interval
             FAR.FlghtApt.ChartAreas[0].AxisX.Interval = 1;
             //Show the Form
-            FAR.Show();
+            FAR.ShowDialog();
+            LogWindow = LogWindow + System.Environment.NewLine + "Reduced Flights Per Airport";
         }
     }
 }

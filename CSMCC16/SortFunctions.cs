@@ -283,8 +283,19 @@ public class SortFunctions
                 file.WriteLine("{0},{1}", tup.Item1, tup.Item2.ToString());
             }
         }
+        //Now call the Reducer
+        ReduceFlightsPassengers RFP = new ReduceFlightsPassengers();
+        RFP.LogWindow = LogWindow;
+        RFP.OutputPath = outputpath;
+        RFP.SortingFile = FlightsPassengersFile;
+        RFP.Reduce();
+        //Update the Log Window
+        LogWindow = RFP.LogWindow;
+        //Garbage Collect
+        RFP = null;
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
         
-
     }
     private void FlightsAirport(string[] MapOutput)
     {
@@ -380,6 +391,10 @@ public class SortFunctions
         RF.LogWindow = LogWindow;
         RF.Reduce();
         LogWindow = RF.LogWindow;
+        //Garbage Collection
+        RF = null;
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
     }
 
 
