@@ -15,6 +15,7 @@ public class SortFunctions
     public string LogWindow = "";
     public string FlightStartLocFile = "";
     public string FlightEndLocFile = "";
+    public string PassengerFlights = "";
     //See what the sort type is
     public void Sort(string SortType, string[] MapOutput)
     {
@@ -31,8 +32,17 @@ public class SortFunctions
                 //Calculate the Flight Distance and total for passengers
                 FlightsDistance(MapOutput);
                 break;
+            case "AllFlightInfo":
+                //Get all of the flight info list
+                AllFlightInfo(MapOutput);
+                break;
 
         }
+    }
+    private void AllFlightInfo(string[] MapOutput)
+    {
+        //No specific sorting needs to be done here, just pass the files to the reducer
+
     }
     private void FlightsDistance(string[] MapOutput)
     {
@@ -180,6 +190,49 @@ public class SortFunctions
         //Do Garbage Collection
         GC.Collect();
         GC.WaitForPendingFinalizers();
+
+        //Get the Passenger Flights
+        //Just swap the keys around for this mapping
+        PassengerFlights = outputpath + @"\Sorters\PassengerFlights.csv";
+
+        //Delete the file if it's already there
+        if (File.Exists(PassengerFlights))
+        {
+            try
+            {
+                File.Delete(PassengerFlights);
+
+            }
+            catch (IOException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightEndLocFile;
+                return;
+            }
+        }
+        List<Tuple<string, string>> PassFlights = new List<Tuple<string, string>>();
+        using (StreamReader reader = new StreamReader(MapOutput[4]))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] Components = line.Split(',');
+                PassFlights.Add(Tuple.Create(Components[1], Components[0]));
+            }
+        }
+        //Now write to the new file
+        using (StreamWriter file = new StreamWriter(PassengerFlights))
+        {
+            foreach(var T in PassFlights)
+            {
+                file.WriteLine("{0},{1}", T.Item1, T.Item2.ToString());
+            }
+        }
+
+        //Do Garbage Collection
+        PassFlights = null;
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
     }
     private void FlightsPassengers(string[] MapOutput)
     {
@@ -319,6 +372,14 @@ public class SortFunctions
         LogWindow = LogWindow + System.Environment.NewLine + ErrorCount.ToString() + " Sorting Errors";
         LogWindow = LogWindow + System.Environment.NewLine + "Sorter File Saved " + FlightsAirportFile;
 
+        //Now Call the Reducer
+        LogWindow = LogWindow + System.Environment.NewLine + "Reducing Flight per Airport";
+        ReduceFlightsAirport RF = new ReduceFlightsAirport();
+        RF.SortingFile = FlightsAirportFile;
+        RF.OutputPath = this.outputpath;
+        RF.LogWindow = LogWindow;
+        RF.Reduce();
+        LogWindow = RF.LogWindow;
     }
 
 

@@ -149,6 +149,11 @@ namespace CSMCC16
                 //Distance For each Flight
                 string[] DistanceFlightFiles = { mapper.AptLatFile, mapper.AptLonFile, mapper.FlightDepArptFile, mapper.FlightDestFile, mapper.FlightPassengerFile };
                 MapOutput.Add("FlightDistance", DistanceFlightFiles);
+
+                //All flight Information
+                string[] AllFlightInfo = { mapper.FlightPassengerFile, mapper.FlightDepArptFile, mapper.FlightDestFile, mapper.FlightDepTimeFile, mapper.FlightTimeFile };
+                MapOutput.Add("AllFlightInfo", AllFlightInfo);
+
                 //Now do the garbage collection from the mappers
                 mapper = null;
                 GC.Collect();

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace CSMCC16
 {
-    public partial class ResultsForm : Form
+    public partial class FlightsAirportResults : Form
     {
-        public ResultsForm()
+        public FlightsAirportResults()
         {
             InitializeComponent();
         }
