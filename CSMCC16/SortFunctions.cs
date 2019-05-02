@@ -13,6 +13,8 @@ public class SortFunctions
     public string FlightsAirportFile = "";
     public string FlightsPassengersFile = "";
     public string LogWindow = "";
+    public string FlightStartLocFile = "";
+    public string FlightEndLocFile = "";
     //See what the sort type is
     public void Sort(string SortType, string[] MapOutput)
     {
@@ -38,13 +40,146 @@ public class SortFunctions
         //Load lat and longs into memory we know buffer is ok from previous step
         Dictionary<string, double> AptLat = new Dictionary<string, double>();
         Dictionary<string, double> AptLon = new Dictionary<string, double>();
+        //Start by populating the Latitude Dictionary
+        using (StreamReader reader = new StreamReader(MapOutput[0]))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] Components = line.Split(',');
+                AptLat.Add(Components[0], Convert.ToDouble(Components[1]));
+            }
+        }
 
-        Dictionary<string, Tuple<double, double>> Flight = new Dictionary<string, Tuple<double, double>>();
+        //Now the Longitude Dictionary
+        using (StreamReader reader = new StreamReader(MapOutput[1]))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] Components = line.Split(',');
+                AptLon.Add(Components[0], Convert.ToDouble(Components[1]));
+            }
+        }
         
         //Get Starting Lat and long for each flight
-        
-        //Get Ending Lat and Long for each flight
+        Dictionary<string, Tuple<double, double>> FlightStart = new Dictionary<string, Tuple<double, double>>();
+        using (StreamReader reader = new StreamReader(MapOutput[2]))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] Components = line.Split(',');
+                //Get the Lat  for that airport
+                //Check to see if it's in the valid list of airports
+                if (AptLat.ContainsKey(Components[1]))
+                {
+                    double lat = AptLat[Components[1]];
+                    double lon = AptLon[Components[1]];
+                    Tuple<double, double> LatLon = new Tuple<double, double>(lat, lon);
+                    if (!FlightStart.ContainsKey(Components[0]))
+                    {
+                        FlightStart.Add(Components[0], LatLon);
+                    }
+                    
+                }
+                
+            }
+        }
+        //Write this to file
+        //Now save the outputs to a Combiner file
+        FlightStartLocFile = outputpath + @"\Sorters\FlightStartLoc.csv";
 
+        //Create the Directory
+        if (!Directory.Exists(outputpath + @"\Sorters"))
+        {
+            //If not, create it
+            Directory.CreateDirectory(outputpath + @"\Sorters");
+        }
+        //Delete the file if it's already there
+        if (File.Exists(FlightStartLocFile))
+        {
+            try
+            {
+                File.Delete(FlightStartLocFile);
+
+            }
+            catch (IOException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightStartLocFile;
+                return;
+            }
+        }
+        //Now add the records
+        using (StreamWriter file = new StreamWriter(FlightStartLocFile))
+        {
+            foreach (var tup in FlightStart)
+            {
+                file.WriteLine("{0},{1},{2}", tup.Key, tup.Value.Item1, tup.Value.Item2);
+                
+            }
+        }
+        //Destroy Flight Start Object
+        FlightStart = null;
+        //Do Garbage Collection
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
+        //Get Ending Lat and Long for each flight
+        Dictionary<string, Tuple<double, double>> FlightEnd = new Dictionary<string, Tuple<double, double>>();
+        using (StreamReader reader = new StreamReader(MapOutput[3]))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] Components = line.Split(',');
+                //Get the Lat  for that airport
+                //Check to see if it's in the valid list of airports
+                if (AptLon.ContainsKey(Components[1]))
+                {
+                    double lat = AptLat[Components[1]];
+                    double lon = AptLon[Components[1]];
+                    Tuple<double, double> LatLon = new Tuple<double, double>(lat, lon);
+                    if (!FlightEnd.ContainsKey(Components[0]))
+                    {
+                        FlightEnd.Add(Components[0], LatLon);
+                    }
+                }
+
+            }
+        }
+        //Write this to file
+        //Now save the outputs to a Combiner file
+        FlightEndLocFile = outputpath + @"\Sorters\FlightEndLoc.csv";
+
+        //Delete the file if it's already there
+        if (File.Exists(FlightEndLocFile))
+        {
+            try
+            {
+                File.Delete(FlightEndLocFile);
+
+            }
+            catch (IOException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightEndLocFile;
+                return;
+            }
+        }
+        //Now add the records
+        using (StreamWriter file = new StreamWriter(FlightEndLocFile))
+        {
+            foreach (var tup in FlightEnd)
+            {
+                file.WriteLine("{0},{1},{2}", tup.Key, tup.Value.Item1, tup.Value.Item2);
+
+            }
+        }
+        //Destroy Flight End Object
+        FlightEnd = null;
+        //Do Garbage Collection
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
     }
     private void FlightsPassengers(string[] MapOutput)
     {

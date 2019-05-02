@@ -147,7 +147,7 @@ namespace CSMCC16
                 MapOutput.Add("FlightPassengers", PassengerFlightFiles);
 
                 //Distance For each Flight
-                string[] DistanceFlightFiles = { mapper.AptLatFile, mapper.AptLatFile, mapper.FlightDepArptFile, mapper.FlightDestFile, mapper.FlightPassengerFile };
+                string[] DistanceFlightFiles = { mapper.AptLatFile, mapper.AptLonFile, mapper.FlightDepArptFile, mapper.FlightDestFile, mapper.FlightPassengerFile };
                 MapOutput.Add("FlightDistance", DistanceFlightFiles);
                 //Now do the garbage collection from the mappers
                 mapper = null;
