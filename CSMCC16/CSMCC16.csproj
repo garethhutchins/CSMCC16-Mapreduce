@@ -50,6 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllFlightInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AllFlightInformation.Designer.cs">
+      <DependentUpon>AllFlightInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DistanceResults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DistanceResults.Designer.cs">
+      <DependentUpon>DistanceResults.cs</DependentUpon>
+    </Compile>
     <Compile Include="FlightsAirportResults.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +75,7 @@
       <DependentUpon>FlightsPassengersResults.cs</DependentUpon>
     </Compile>
     <Compile Include="ReduceFlightDistance.cs" />
+    <Compile Include="ReduceFlightInformation.cs" />
     <Compile Include="ReduceFlightsPassengers.cs" />
     <Compile Include="ReduceFlightsAirport.cs" />
     <Compile Include="SortFunctions.cs" />
@@ -76,6 +89,12 @@
     <Compile Include="MapFunctions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AllFlightInformation.resx">
+      <DependentUpon>AllFlightInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DistanceResults.resx">
+      <DependentUpon>DistanceResults.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FlightsAirportResults.resx">
       <DependentUpon>FlightsAirportResults.cs</DependentUpon>
     </EmbeddedResource>

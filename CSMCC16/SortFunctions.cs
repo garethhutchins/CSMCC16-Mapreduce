@@ -42,7 +42,14 @@ public class SortFunctions
     private void AllFlightInfo(string[] MapOutput)
     {
         //No specific sorting needs to be done here, just pass the files to the reducer
-
+        
+        ReduceFlightInformation RFI = new ReduceFlightInformation();
+        RFI.FlightPassengerFile = MapOutput[0];
+        RFI.FlightDepArptFile = MapOutput[1];
+        RFI.FlightDestFile = MapOutput[2];
+        RFI.FlightDepTimeFile = MapOutput[3];
+        RFI.FlightTimeFile = MapOutput[4];
+        RFI.Reduce();
     }
     private void FlightsDistance(string[] MapOutput)
     {
