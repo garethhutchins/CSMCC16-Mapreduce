@@ -102,6 +102,11 @@ public class Mapper
                     log.AppendText(System.Environment.NewLine + "Unable to Delete File " + file);
                     return;
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    log.AppendText(System.Environment.NewLine + "Unable to Delete File " + file);
+                    return;
+                }
             }
         }
 
@@ -135,6 +140,11 @@ public class Mapper
                 DelCount++;
             }
             catch (IOException)
+            {
+                log.AppendText(System.Environment.NewLine + "Unable to Delete File " + passchunk);
+                return;
+            }
+            catch (UnauthorizedAccessException)
             {
                 log.AppendText(System.Environment.NewLine + "Unable to Delete File " + passchunk);
                 return;
@@ -183,6 +193,11 @@ public class Mapper
                     log.AppendText(System.Environment.NewLine + "Unable to Delete File " + file);
                     return;
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    log.AppendText(System.Environment.NewLine + "Unable to Delete File " + file);
+                    return;
+                }
             }
         }
 
@@ -220,6 +235,11 @@ public class Mapper
             catch (IOException)
             {
                 log.AppendText(System.Environment.NewLine + "Unable to Delete File " +aptchunk);
+                return;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                log.AppendText(System.Environment.NewLine + "Unable to Delete File " + aptchunk);
                 return;
             }
         }
@@ -447,12 +467,6 @@ public class Mapper
                         OK = false;
                         ErrorText = "Invalid Flight Time Format " + components[5]; 
                         PassengerErrorCount++;
-                    }
-                    else
-                    {
-                        //If it's OK, convert it to HH:MM
-                        TimeSpan ts = TimeSpan.FromMinutes(Convert.ToInt16(components[5]));
-                        components[5] = string.Format("{0}:{1}", ts.Hours, ts.Minutes);
                     }
                     //Now check to see if all is OK
                     if (OK)

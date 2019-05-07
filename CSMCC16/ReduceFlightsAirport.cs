@@ -55,6 +55,11 @@ namespace CSMCC16
                     LogWindow = LogWindow + System.Environment.NewLine + "Unable to Save File " + outputFile;
                     return;
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    LogWindow = LogWindow + System.Environment.NewLine + "Unable to Save File " + outputFile;
+                    return;
+                }
             }
             //Now save the File and pass the results to the Results Window
             FlightsAirportResults FAR = new FlightsAirportResults();

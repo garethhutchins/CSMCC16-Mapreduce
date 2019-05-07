@@ -49,7 +49,10 @@ public class SortFunctions
         RFI.FlightDestFile = MapOutput[2];
         RFI.FlightDepTimeFile = MapOutput[3];
         RFI.FlightTimeFile = MapOutput[4];
+        RFI.OuputPath = outputpath;
+        RFI.LogWindow = LogWindow;
         RFI.Reduce();
+        LogWindow = LogWindow + RFI.LogWindow;
     }
     private void FlightsDistance(string[] MapOutput)
     {
@@ -126,6 +129,11 @@ public class SortFunctions
                 LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightStartLocFile;
                 return;
             }
+            catch (UnauthorizedAccessException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightStartLocFile;
+                return;
+            }
         }
         //Now add the records
         using (StreamWriter file = new StreamWriter(FlightStartLocFile))
@@ -182,6 +190,11 @@ public class SortFunctions
                 LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightEndLocFile;
                 return;
             }
+            catch (UnauthorizedAccessException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightEndLocFile;
+                return;
+            }
         }
         //Now add the records
         using (StreamWriter file = new StreamWriter(FlightEndLocFile))
@@ -211,6 +224,11 @@ public class SortFunctions
 
             }
             catch (IOException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightEndLocFile;
+                return;
+            }
+            catch (UnauthorizedAccessException)
             {
                 LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightEndLocFile;
                 return;
@@ -289,6 +307,11 @@ public class SortFunctions
 
             }
             catch (IOException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightsPassengersFile;
+                return;
+            }
+            catch (UnauthorizedAccessException)
             {
                 LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightsPassengersFile;
                 return;
@@ -383,6 +406,11 @@ public class SortFunctions
 
             }
             catch (IOException)
+            {
+                LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightsAirportFile;
+                return;
+            }
+            catch (UnauthorizedAccessException)
             {
                 LogWindow = LogWindow + System.Environment.NewLine + "Unable to Delete File " + FlightsAirportFile;
                 return;

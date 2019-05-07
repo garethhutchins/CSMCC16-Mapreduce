@@ -90,6 +90,11 @@ namespace CSMCC16
                     logwindow = Environment.NewLine + "Unable to Delete FlightDistance.csv";
                     return;
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    logwindow = Environment.NewLine + "Unable to Delete FlightDistance.csv";
+                    return;
+                }
             }
             //Now save the contents to file
             //And the Results form
@@ -159,6 +164,11 @@ namespace CSMCC16
                     logwindow = Environment.NewLine + "Unable to Delete PassengerDistance.csv";
                     return;
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    logwindow = Environment.NewLine + "Unable to Delete PassengerDistance.csv";
+                    return;
+                }
             }
             //Now save the contents to file
             using (StreamWriter Writer = new StreamWriter(outputpath + @"\Reducers\PassengerDistance.csv"))
@@ -181,6 +191,11 @@ namespace CSMCC16
                     File.Delete(outputpath + @"\PassengerDistanceErrors.txt");
                 }
                 catch (IOException)
+                {
+                    logwindow = Environment.NewLine + "Unable to Delete PassengerDistanceErrors.txt";
+                    return;
+                }
+                catch (UnauthorizedAccessException)
                 {
                     logwindow = Environment.NewLine + "Unable to Delete PassengerDistanceErrors.txt";
                     return;

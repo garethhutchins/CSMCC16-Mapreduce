@@ -28,23 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.FlightsChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.FlightsTable = new System.Windows.Forms.DataGridView();
+            this.Flight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.PassengerChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.PassengerTable = new System.Windows.Forms.DataGridView();
             this.Passenger = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PassengerDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Flight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FlightsChart)).BeginInit();
@@ -81,14 +81,14 @@
             // 
             // FlightsChart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.FlightsChart.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.FlightsChart.ChartAreas.Add(chartArea1);
             this.FlightsChart.Location = new System.Drawing.Point(7, 7);
             this.FlightsChart.Name = "FlightsChart";
-            this.FlightsChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
-            series3.ChartArea = "ChartArea1";
-            series3.Name = "Series1";
-            this.FlightsChart.Series.Add(series3);
+            this.FlightsChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "Series1";
+            this.FlightsChart.Series.Add(series1);
             this.FlightsChart.Size = new System.Drawing.Size(732, 359);
             this.FlightsChart.TabIndex = 0;
             this.FlightsChart.Text = "chart1";
@@ -117,6 +117,20 @@
             this.FlightsTable.Size = new System.Drawing.Size(732, 373);
             this.FlightsTable.TabIndex = 0;
             // 
+            // Flight
+            // 
+            this.Flight.HeaderText = "Flight";
+            this.Flight.Name = "Flight";
+            this.Flight.ReadOnly = true;
+            // 
+            // Distance
+            // 
+            this.Distance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            this.Distance.Width = 74;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.PassengerChart);
@@ -129,14 +143,14 @@
             // 
             // PassengerChart
             // 
-            chartArea4.Name = "ChartArea1";
-            this.PassengerChart.ChartAreas.Add(chartArea4);
+            chartArea2.Name = "ChartArea1";
+            this.PassengerChart.ChartAreas.Add(chartArea2);
             this.PassengerChart.Location = new System.Drawing.Point(4, 14);
             this.PassengerChart.Name = "PassengerChart";
             this.PassengerChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.EarthTones;
-            series4.ChartArea = "ChartArea1";
-            series4.Name = "Series1";
-            this.PassengerChart.Series.Add(series4);
+            series2.ChartArea = "ChartArea1";
+            series2.Name = "Series1";
+            this.PassengerChart.Series.Add(series2);
             this.PassengerChart.Size = new System.Drawing.Size(726, 361);
             this.PassengerChart.TabIndex = 0;
             this.PassengerChart.Text = "chart1";
@@ -177,20 +191,6 @@
             this.PassengerDistance.Name = "PassengerDistance";
             this.PassengerDistance.ReadOnly = true;
             this.PassengerDistance.Width = 74;
-            // 
-            // Flight
-            // 
-            this.Flight.HeaderText = "Flight";
-            this.Flight.Name = "Flight";
-            this.Flight.ReadOnly = true;
-            // 
-            // Distance
-            // 
-            this.Distance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Distance.HeaderText = "Distance";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            this.Distance.Width = 74;
             // 
             // DistanceResults
             // 
