@@ -15,6 +15,7 @@ namespace CSMCC16
 
         public void Reduce()
         {
+            LogWindow = LogWindow + System.Environment.NewLine + "Reducing Flight Information";
             //Create a Dictionary of Airport Codes and Number of Flights
             Dictionary<string, int> FlightsAirport = new Dictionary<string, int>();
             //Now read the file and add each value to the dictionary.

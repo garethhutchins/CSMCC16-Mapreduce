@@ -21,6 +21,7 @@ namespace CSMCC16
         {
             //Flight Passenger is the master record that will be read last
             //Load the Departure Times
+            LogWindow = LogWindow + System.Environment.NewLine + "Reducing Flight Information";
             string ErrorText = "";
             Dictionary<string, DateTime> DepTime = new Dictionary<string, DateTime>();
             using (StreamReader Reader = new StreamReader(FlightDepTimeFile))

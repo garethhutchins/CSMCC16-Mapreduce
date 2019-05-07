@@ -56,6 +56,7 @@ public class SortFunctions
     }
     private void FlightsDistance(string[] MapOutput)
     {
+        LogWindow = LogWindow + System.Environment.NewLine + " Sorting Flight Distance";
         string ErrorFile = outputpath + @"\FlightsDistanceErrorFile.txt";
         //Load lat and longs into memory we know buffer is ok from previous step
         Dictionary<string, double> AptLat = new Dictionary<string, double>();
@@ -273,6 +274,7 @@ public class SortFunctions
     }
     private void FlightsPassengers(string[] MapOutput)
     {
+        LogWindow = LogWindow + System.Environment.NewLine + "Sorting Flight Passengers ";
         string ErrorFile = outputpath + @"\PassengerFlightsErrorFile.txt";
         //First load all of the unique airport codes into a dictionay
         //create a list of tuples to assign the value, the reducer will then do the calculations later.
@@ -341,7 +343,7 @@ public class SortFunctions
     }
     private void FlightsAirport(string[] MapOutput)
     {
-       
+        LogWindow = LogWindow + System.Environment.NewLine + "Sorting Flight Airports ";
         String ErrorFile = outputpath + @"\FlightsAirportErrorFile.txt";
         //First load all of the unique airport codes into a dictionay
         //We'll use a dictionary tuple as each code will be unique

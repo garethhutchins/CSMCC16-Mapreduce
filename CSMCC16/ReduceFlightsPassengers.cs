@@ -14,6 +14,7 @@ using System.Threading.Tasks;
         public string LogWindow;
         public void  Reduce()
         {
+        LogWindow = LogWindow + System.Environment.NewLine + "Reducing Flight Information";
         //Create a Dictionary For the Flights
         Dictionary<string, int> FlightsPassengers = new Dictionary<string, int>();
         //Loop through all of the rows in the file

@@ -17,7 +17,9 @@ namespace CSMCC16
         private Dictionary<string, double> FlightDistance = new Dictionary<string, double>();
         private string ErrorText = "";
         public void Reduce()
+
         {
+            logwindow = logwindow + System.Environment.NewLine + "Reducing Flight Information";
             //Now reduce the Flight Distance Calculation
             //Create a Dictionary for each flight and start and end lat long
             Dictionary<string, Tuple<double, double>> FlightOri = new Dictionary<string, Tuple<double, double>>();
