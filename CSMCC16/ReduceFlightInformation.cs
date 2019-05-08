@@ -160,10 +160,10 @@ namespace CSMCC16
                     //Save it to file
                     using (StreamWriter Writer = new StreamWriter(ReducedFile, true))
                     {
-                        Writer.WriteLine("{0},{1},{2},{3},{4},{5},{6}", Components[0], Components[1], DepApt[Flight], ArvApt[Flight], DepTime[Flight].ToString("HH:mm"), ArrTime[Flight].ToString("HH:mm"), TimeSpan.FromMinutes(FlightTime[Flight]).ToString());
+                        Writer.WriteLine("{0},{1},{2},{3},{4},{5},{6}", Components[0], Components[1], DepApt[Flight], ArvApt[Flight], DepTime[Flight].ToString("HH:mm:ss"), ArrTime[Flight].ToString("HH:mm:ss"), TimeSpan.FromMinutes(FlightTime[Flight]).ToString());
                     }
                     //Add the result to the table
-                    AFI.dataGridView1.Rows.Add(Components[0], Components[1], DepApt[Flight], ArvApt[Flight], DepTime[Flight].ToString("HH:mm"), ArrTime[Flight].ToString("HH:mm"), TimeSpan.FromMinutes(FlightTime[Flight]).ToString());
+                    AFI.dataGridView1.Rows.Add(Components[0], Components[1], DepApt[Flight], ArvApt[Flight], DepTime[Flight].ToString("HH:mm:ss"), ArrTime[Flight].ToString("HH:mm:ss"), TimeSpan.FromMinutes(FlightTime[Flight]).ToString());
                 }
             }
             //Do Garbage Cleanup
